@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CozyTS</title>
+   
+    <link rel="Upheaval" href="https://uploads.onecompiler.io/43vnb47vw/443kknjvu/upheavtt.png">
+   
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+       
+        <canvas id="tetrisCanvas" width="200" height="320"></canvas>
+       
+        <div class="info-painel">
+            <h2>🅲🅾🆉🆈 🆃🆂</h2>
+            <h3>Pontuação: <span id="score">0</span></h3>
+            <h3>Recorde: <span id="highScore">0</span></h3>
+            <h3>Duração: <span id="duration">00:00</span></h3>
+           
+            <h4>Próxima Peça:</h4>
+            <canvas id="nextPieceCanvas" width="80" height="80"></canvas>
+           
+            <button id="startButton">COMEÇAR JOGO</button>
+            <button id="pauseButton" disabled>PAUSAR (P)</button>
+            <button id="configButton">CONFIGURAÇÕES</button>
+           
+            <p class="controls">
+                setas: Mover<br>
+                seta cima: Girar<br>
+                seta baixo: Queda rápida
+            </p>
+
+            <div class="highscores-list">
+                <h4> ៸៸៸ TOP 10   ៸៸៸</h4>
+                <ol id="topScoresList"></ol>
+            </div>
+        </div>
+    </div>
+
+    <audio id="gameMusic" loop src="https://uploads.onecompiler.io/43vnb47vw/443kknjvu/lofi.png"></audio>
+
+    <div id="instructionsOverlay" class="overlay active">
+        <div class="overlay-content">
+            <h3>Instruções do Jogo</h3>
+            <p><strong>Controles:</strong></p>
+            <ul>
+                <li><strong>Setas Esquerda/Direita:</strong> Mover Peça</li>
+                <li><strong>Seta Cima / Barra de Espaço:</strong> Girar Peça</li>
+                <li><strong>Seta Baixo:</strong> Queda Rápida</li>
+                <li><strong>Tecla P:</strong> Pausar/Despausar</li>
+            </ul>
+            <p>Seu recorde é salvo no seu navegador. Boa experiência! ദ്ദി •⩊• )</p>
+            <button id="closeInstructions">ENTENDIDO</button>
+        </div>
+    </div>
+
+    <div id="pauseOverlay" class="overlay">
+        <div class="overlay-content">
+            <h3>JOGO PAUSADO</h3>
+            <p>O tempo parou, tome um cafézinho enquanto descansa.𝗓 ᶻ</p>
+            <button id="resumeButton">CONTINUAR (P)</button>
+            <hr>
+            <p class="developers">desenvolvido por: <a href="https://github.com/P3DROINDIANO" target="_blank">Emmanuelle Kathlen Silvestre Vieira e Pedro Henrique Gonçalves de Oliveira</a></p>
+        </div>
+    </div>
+
+    <div id="configOverlay" class="overlay">
+        <div class="overlay-content">
+            <h3>Configurações</h3>
+            <label for="volumeSlider"> ♬ Volume da música:</label>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+           
+            <label>
+                <input type="checkbox" id="muteCheckbox"> Desligar :<
+            </label>
+           
+            <button id="saveConfig">FECHAR</button>
+            <hr>
+            <p class="developers">Desenvolvido por: <a href="https://github.com/emmitsuba" target="_blank">Emmanuelle Kathlen Silvestre Vieira && Pedro Henrique Gonçalves de Oliveira</a></p>
+        </div>
+    </div>
+<div id="nameEntryOverlay" class="overlay">
+    <div class="overlay-content name-prompt">
+        <h3>ＮＯＶＯ　ＲＥＣＯＲＤＥ</h3>
+        <p>Muito bem! ⋆౨ৎ˚⟡˖ ࣪ </p>
+         <p>
+⠀⠀  ⠀ ⠀⠀:¨ ·.· ¨:
+⠀⠀ ⠀  ⠀⠀  ` . ꔫ
+         <br>
+         Digite seu nome para salvar sua pontuação: </p>
+        <input type="text" id="playerNameInput" placeholder="˚ʚ♡ɞ˚" maxlength="15">
+       
+        <div class="button-group">
+            <button id="saveNameButton" class="main-button">SALVAR</button>
+            <button id="cancelNameButton" class="secondary-button">CANCELAR</button>
+        </div>
+    </div>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>
