@@ -4,29 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CozyTS</title>
-   
+    
     <link rel="Upheaval" href="https://uploads.onecompiler.io/43vnb47vw/443kknjvu/upheavtt.png">
-   
+    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="game-container">
-       
+        
         <canvas id="tetrisCanvas" width="200" height="320"></canvas>
-       
+        
         <div class="info-painel">
-            <h2>🅲🅾🆉🆈 🆃🆂</h2>
+            <h2>🅲🆉🆈 🆃🆂</h2>
             <h3>Pontuação: <span id="score">0</span></h3>
             <h3>Recorde: <span id="highScore">0</span></h3>
             <h3>Duração: <span id="duration">00:00</span></h3>
-           
+            
             <h4>Próxima Peça:</h4>
             <canvas id="nextPieceCanvas" width="80" height="80"></canvas>
-           
+            
             <button id="startButton">COMEÇAR JOGO</button>
             <button id="pauseButton" disabled>PAUSAR (P)</button>
             <button id="configButton">CONFIGURAÇÕES</button>
-           
+            
             <p class="controls">
                 setas: Mover<br>
                 seta cima: Girar<br>
@@ -72,33 +72,41 @@
             <h3>Configurações</h3>
             <label for="volumeSlider"> ♬ Volume da música:</label>
             <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
-           
+            
             <label>
                 <input type="checkbox" id="muteCheckbox"> Desligar :<
             </label>
-           
+            
             <button id="saveConfig">FECHAR</button>
             <hr>
             <p class="developers">Desenvolvido por: <a href="https://github.com/emmitsuba" target="_blank">Emmanuelle Kathlen Silvestre Vieira && Pedro Henrique Gonçalves de Oliveira</a></p>
         </div>
     </div>
+    
 <div id="nameEntryOverlay" class="overlay">
     <div class="overlay-content name-prompt">
         <h3>ＮＯＶＯ　ＲＥＣＯＲＤＥ</h3>
         <p>Muito bem! ⋆౨ৎ˚⟡˖ ࣪ </p>
-         <p>
-⠀⠀  ⠀ ⠀⠀:¨ ·.· ¨:
-⠀⠀ ⠀  ⠀⠀  ` . ꔫ
-         <br>
-         Digite seu nome para salvar sua pontuação: </p>
+        <p>Digite seu nome para salvar sua pontuação: </p>
         <input type="text" id="playerNameInput" placeholder="˚ʚ♡ɞ˚" maxlength="15">
-       
+        
         <div class="button-group">
             <button id="saveNameButton" class="main-button">SALVAR</button>
             <button id="cancelNameButton" class="secondary-button">CANCELAR</button>
         </div>
     </div>
 </div>
+
+<div id="autoPauseOverlay" class="overlay">
+    <div class="speech-bubble">
+        <h3>Hora da Pausa!</h3>
+        <img src="https://uploads.onecompiler.io/43s2gnt72/443vd9kau/pixil-frame-0.png" alt="Xícara de café pixel art" class="pause-trophy">
+        
+        <p>Uau, Você alcançou 1 minuto e 11 segundos, que......... coincidência. Aqui está um presente de reconhecimento pelo seu esforço🤩<br>Gostaria de uma pequena pausa para alongar?</p>
+        <button id="resumeAutoPauseButton">CONTINUAR JOGO</button>
+    </div>
+</div>
+
     <script src="script.js"></script>
 </body>
 </html>
