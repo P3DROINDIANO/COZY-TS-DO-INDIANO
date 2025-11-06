@@ -13,13 +13,13 @@
 */
 
 body {
-    /* 🌟 USANDO A FONTE 'Upheaval' */
+    /* USANDO A FONTE 'Upheaval' */
     font-family: 'Upheaval', 'Verdana', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-   
+    
     /* Fundo Lofi/Café (MANTIDO) */
     background-color: #4A3C32;
     background-image: url('https://64.media.tumblr.com/ac8e62eabf0aca1078c46e656528f3ac/f208fdc993beca1b-bc/s1280x1920/0fe614f96dbf0ff4f2144a9cd3582adf5cd503fa.gifv');
@@ -27,7 +27,7 @@ body {
     background-attachment: fixed;
     background-position: center center;
     background-repeat: no-repeat;
-   
+    
     color: #F8E7D5; /* Cor de texto claro principal */
     margin: 0;
     position: relative;
@@ -44,7 +44,7 @@ body {
     /* Sombra de contêiner grande e aconchegante */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 0, 0, 0.1);
     z-index: 10;
-   
+    
     margin: auto;
     max-width: fit-content;
     border: 3px solid #6B5B4C; /* Borda sutil */
@@ -94,13 +94,13 @@ button {
     font-size: 1em;
     font-weight: bold;
     font-family: 'Upheaval', 'Verdana', sans-serif;
-   
+    
     background-color: #D67A4F; /* Terracota Aconchegante */
     color: #2F241C;
     border: none;
     border-radius: 15px; /* Bem arredondado */
     cursor: pointer;
-   
+    
     /* Efeito de profundidade para parecer "almofadado" */
     box-shadow: 0 4px 0 0 #A05244;
     transition: background-color 0.1s ease, transform 0.1s, box-shadow 0.1s;
@@ -305,4 +305,86 @@ button:disabled {
 
 .secondary-button:active {
     box-shadow: 0 1px 0 0 #5A4E42;
+}
+
+/* --- Estilos para o Balão de Fala (Auto-Pause) --- */
+
+.speech-bubble {
+    /* Pega o estilo base do overlay-content */
+    background-color: #F8E7D5; 
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 8px 8px 0 0 #4A3C32;
+    max-width: 400px;
+    text-align: center;
+    color: #4A3C32; 
+    border: 3px solid #D67A4F;
+
+    position: relative; /* Necessário para a "cauda" do balão */
+}
+
+.speech-bubble h3 {
+    color: #D67A4F;
+    text-shadow: none;
+    margin-top: 0;
+}
+
+.speech-bubble p {
+    color: #4A3C32;
+}
+
+.speech-bubble button {
+    margin-top: 20px;
+}
+
+/* A "cauda" do balão (feita com dois triângulos sobrepostos) */
+
+/* Triângulo de trás (a borda) */
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: #D67A4F; /* Cor da borda */
+    border-bottom: 0;
+    
+    margin-left: -20px;
+    margin-bottom: -23px; /* (altura do triângulo + grossura da borda) */
+}
+
+/* Triângulo da frente (o preenchimento) */
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    
+    width: 0;
+    height: 0;
+    border: 17px solid transparent;
+    border-top-color: #F8E7D5; /* Cor de fundo do balão */
+    border-bottom: 0;
+    
+    margin-left: -17px;
+    margin-bottom: -17px; /* Posiciona dentro do triângulo de borda */
+    z-index: 1; /* Garante que fique por cima */
+}
+
+/* --- (NOVO) Estilos para a Imagem no Balão de Fala --- */
+.speech-bubble .pause-trophy {
+    max-width: 100%; /* Garante que a imagem não transborde */
+    height: auto;
+    max-height: 150px; /* Limita a altura para não ficar muito grande */
+    margin: 15px auto; /* Centraliza e adiciona espaço */
+    display: block; /* Garante que as margens automáticas funcionem */
+    border-radius: 5px; /* Bordas suaves para a imagem */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra sutil na imagem */
+    /* Para a imagem pixel art, podemos querer desativar o anti-aliasing */
+    image-rendering: pixelated; 
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
