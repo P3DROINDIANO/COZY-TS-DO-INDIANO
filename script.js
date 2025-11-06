@@ -18,6 +18,10 @@ const instructionsOverlay = document.getElementById('instructionsOverlay');
 const pauseOverlay = document.getElementById('pauseOverlay');
 const configOverlay = document.getElementById('configOverlay');
 
+// NOVO OVERLAY (BALÃO DE FALA)
+const autoPauseOverlay = document.getElementById('autoPauseOverlay');
+const resumeAutoPauseButton = document.getElementById('resumeAutoPauseButton');
+
 // Controles de Configuração
 const volumeSlider = document.getElementById('volumeSlider');
 const muteCheckbox = document.getElementById('muteCheckbox');
@@ -112,7 +116,7 @@ function saveNewHighScore() {
     // Pega o nome do input (limpa o espaço e garante que seja 'Anônimo' se vazio)
     const playerName = playerNameInput.value.trim().substring(0, 15) || 'Anônimo';
     const records = loadHighScoresList();
-   
+    
     // 1. Cria o novo registro
     const newRecord = { score: latestScore, name: playerName };
 
@@ -138,10 +142,10 @@ function saveNewHighScore() {
 function checkAndPromptHighScore() {
     const records = loadHighScoresList();
     const topN = 10;
-   
+    
     // Se a lista não tem 10 scores AINDA, ou se o score atual for maior que o menor score do top 10
     const isNewHighscore = records.length < topN || score > records[topN - 1].score;
-   
+    
     if (isNewHighscore) {
         showNameEntry(score);
     }
@@ -175,65 +179,82 @@ function displayTopScores(records) {
 
 // Funções auxiliares (sem alterações)
 function formatTime(totalSeconds) {
-// ... (mantenha sua função formatTime aqui)
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const pad = (num) => String(num).padStart(2, '0');
     return `${pad(minutes)}:${pad(seconds)}`;
 }
 
+// MODIFICADA - para chamar o togglePause com um parâmetro
 function startTimer() {
-// ... (mantenha sua função startTimer aqui)
     startTime = Date.now();
     timerInterval = setInterval(() => {
         if (!gamePaused && !gameOver) {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
             durationDisplay.textContent = formatTime(elapsed);
+            
+            // MODIFICADO: Passa 'true' para indicar um auto-pause
+            if (elapsed === 71) {
+                togglePause(true); 
+            }
         }
     }, 1000);
 }
 
 function loadVolume() {
-// ... (mantenha sua função loadVolume aqui)
     const savedVolume = parseFloat(localStorage.getItem('tetrisVolume')) || 0.5;
     const savedMute = localStorage.getItem('tetrisMute') === 'true';
 
     volumeSlider.value = savedVolume;
     muteCheckbox.checked = savedMute;
-   
+    
     gameMusic.volume = savedVolume;
-    gameMusic.muted = savedMute;
+    gameMusic.muted = savedMMute;
 }
 
 // ===============================================
 // ESTADO DO JOGO E LÓGICA
 // ===============================================
-// ... (restante das suas funções de lógica do jogo - togglePause, drawBlock, etc. - sem alteração)
-function togglePause() {
+
+// MODIFICADA - para aceitar o parâmetro 'isAutoPause'
+function togglePause(isAutoPause = false) {
     if (gameOver) return;
-   
+    
     gamePaused = !gamePaused;
-   
+    
     if (gamePaused) {
+        // Pausando o jogo
         clearInterval(gameInterval);
         gameMusic.pause();
         pauseButton.textContent = 'CONTINUAR (P)';
-        pauseOverlay.classList.add('active');
+        
+        // NOVA LÓGICA: Decide qual overlay mostrar
+        if (isAutoPause) {
+            autoPauseOverlay.classList.add('active');
+        } else {
+            pauseOverlay.classList.add('active');
+        }
+        
     } else {
+        // Retomando o jogo
         gameInterval = setInterval(moveDown, DROP_SPEED);
         if (!gameMusic.muted) gameMusic.play().catch(() => {});
         pauseButton.textContent = 'PAUSAR (P)';
+        
+        // NOVA LÓGICA: Esconde ambos os overlays
         pauseOverlay.classList.remove('active');
+        autoPauseOverlay.classList.remove('active');
+        
         draw();
     }
 }
 
 function drawBlock(x, y, color, ctx) {
     if (ctx === undefined) ctx = context;
-   
+    
     ctx.fillStyle = color;
     ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-   
+    
     ctx.strokeStyle = '#111';
     ctx.lineWidth = 1;
     ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
@@ -265,7 +286,7 @@ function drawNextPiece() {
     nextPieceContext.clearRect(0, 0, nextPieceCanvas.width, nextPieceCanvas.height);
     const nextPieceColorId = TETROMINOES.indexOf(nextPiece);
     const offset = 0.5;
-   
+    
     for (let r = 0; r < nextPiece.length; r++) {
         for (let c = 0; c < nextPiece[r].length; c++) {
             if (nextPiece[r][c] === 1) {
@@ -280,7 +301,7 @@ function generateNewPiece() {
     const nextIndex = TETROMINOES.indexOf(nextPiece);
     currentPiece = nextPiece;
     currentPieceColorId = nextIndex;
-   
+    
     currentPieceX = Math.floor(COLS / 2) - Math.floor(currentPiece.length / 2);
     currentPieceY = 0;
 
@@ -293,19 +314,19 @@ function generateNewPiece() {
         clearInterval(gameInterval);
         clearInterval(timerInterval);
         gameMusic.pause();
-       
+        
         // Chamada da nova função de salvar recordes!
         checkAndPromptHighScore();
 
         context.fillStyle = 'rgba(0, 0, 0, 0.7)';
         context.fillRect(0, 0, canvas.width, canvas.height);
-       
-        // 🌟 Usando a nova fonte 'Upheaval'
+        
+        //   Usando a nova fonte 'Upheaval'
         context.fillStyle = '#F8E7D5';
         context.font = 'bold 20px Upheaval';
         context.textAlign = 'center';
         context.fillText('FIM DE JOGO!', canvas.width / 2, canvas.height / 2);
-       
+        
         startButton.textContent = 'RECOMEÇAR';
         startButton.disabled = false;
         pauseButton.disabled = true;
@@ -377,7 +398,7 @@ function checkAndClearLines() {
 function rotate() {
     const N = currentPiece.length;
     const rotatedPiece = Array.from({ length: N }, () => Array(N).fill(0));
-   
+    
     for (let r = 0; r < N; r++) {
         for (let c = 0; c < N; c++) {
             rotatedPiece[c][N - 1 - r] = currentPiece[r][c];
@@ -407,16 +428,16 @@ function resetGame() {
     const initialIndex = Math.floor(Math.random() * (TETROMINOES.length - 1)) + 1;
     nextPiece = TETROMINOES[initialIndex];
     generateNewPiece();
-   
+    
     gameInterval = setInterval(moveDown, DROP_SPEED);
-   
+    
     startButton.textContent = 'REINICIAR';
     startButton.disabled = true;
     pauseButton.disabled = false;
-   
+    
     pauseOverlay.classList.remove('active');
     configOverlay.classList.remove('active');
-   
+    
     draw();
 }
 
@@ -446,12 +467,17 @@ document.getElementById('closeInstructions').addEventListener('click', () => {
     instructionsOverlay.classList.remove('active');
 });
 
+// Chama togglePause() (que por padrão é 'isAutoPause = false')
 pauseButton.addEventListener('click', togglePause);
 document.getElementById('resumeButton').addEventListener('click', togglePause);
 
+// NOVO: Listener para o botão de continuar do balão
+resumeAutoPauseButton.addEventListener('click', togglePause);
+
+
 document.getElementById('configButton').addEventListener('click', () => {
     if (!gameOver && !gamePaused) {
-        togglePause();
+        togglePause(); // Pausa manual
     }
     configOverlay.classList.add('active');
 });
@@ -487,7 +513,7 @@ document.addEventListener('keydown', e => {
     if (gameOver) return;
 
     if (e.key === 'p' || e.key === 'P') {
-        togglePause();
+        togglePause(); // Pausa manual
         return;
     }
 
